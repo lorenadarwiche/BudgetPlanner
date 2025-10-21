@@ -11,34 +11,19 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  // Initialize theme from localStorage or default to 'light'
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'light';
-  });
+  // Always use dark mode
+  const theme = 'dark';
 
   useEffect(() => {
-    // Apply theme to document root
+    // Apply dark mode to document root
     const root = window.document.documentElement;
-    
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    
-    // Save theme to localStorage
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
+    root.classList.add('dark');
+  }, []);
 
   const value = {
     theme,
-    toggleTheme,
-    isDark: theme === 'dark'
+    toggleTheme: () => {}, // No-op function
+    isDark: true
   };
 
   return (
