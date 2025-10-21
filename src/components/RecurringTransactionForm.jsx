@@ -123,7 +123,10 @@ const RecurringTransactionForm = ({ onAddRecurring }) => {
           >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
+            <option value="biweekly">Bi-Weekly (Every 2 Weeks)</option>
             <option value="monthly">Monthly</option>
+            <option value="bimonthly">Bi-Monthly (Every 2 Months)</option>
+            <option value="semiannually">Every 6 Months</option>
             <option value="yearly">Yearly</option>
           </select>
         </div>

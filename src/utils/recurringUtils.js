@@ -67,8 +67,17 @@ const getNextOccurrence = (fromDate, frequency, minDate = null) => {
     case 'weekly':
       nextDate.setDate(nextDate.getDate() + 7);
       break;
+    case 'biweekly':
+      nextDate.setDate(nextDate.getDate() + 14);
+      break;
     case 'monthly':
       nextDate.setMonth(nextDate.getMonth() + 1);
+      break;
+    case 'bimonthly':
+      nextDate.setMonth(nextDate.getMonth() + 2);
+      break;
+    case 'semiannually':
+      nextDate.setMonth(nextDate.getMonth() + 6);
       break;
     case 'yearly':
       nextDate.setFullYear(nextDate.getFullYear() + 1);

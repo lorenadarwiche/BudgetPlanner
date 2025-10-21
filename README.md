@@ -16,7 +16,7 @@ A modern, feature-rich budget tracking application built with React, Tailwind CS
 - **Smart Filtering**: Filter transactions by type, category, and date range
 - **Real-time Summary**: View total income, expenses, and balance at a glance
 - **📥 Data Export**: Export transactions to CSV or Excel format with one click
-- **🔄 Recurring Transactions**: Set up automatic recurring income and expenses (daily, weekly, monthly, yearly)
+- **🔄 Recurring Transactions**: Set up automatic recurring income and expenses with 7 frequency options (daily, weekly, bi-weekly, monthly, bi-monthly, every 6 months, yearly)
 - **Persistent Storage**: All data is saved to localStorage automatically
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Modern UI**: Beautiful gradient cards and sleek pastel color scheme
@@ -135,7 +135,7 @@ Use the filters section to:
 
 1. When adding a transaction, check the box **"Make this a recurring transaction"**
 2. Choose your settings:
-   - **Frequency**: Daily, Weekly, Monthly, or Yearly
+   - **Frequency**: Daily, Weekly, Bi-Weekly, Monthly, Bi-Monthly, Every 6 Months, or Yearly
    - **Start Date**: When the recurring transaction begins
    - **End Date** (Optional): When to stop generating transactions
 3. Click **"Add"**
@@ -154,11 +154,13 @@ Use the filters section to:
 - **Delete**: Remove the recurring rule (past transactions remain unless deleted individually)
 
 **Example Use Cases:**
-- Monthly rent or mortgage payments
-- Weekly grocery budgets
-- Daily coffee expenses  
-- Yearly subscription renewals
-- Bi-weekly salary deposits
+- **Daily**: Coffee purchases, lunch expenses
+- **Weekly**: Grocery shopping, entertainment budget
+- **Bi-Weekly**: Salary deposits (common pay schedule)
+- **Monthly**: Rent, utilities, subscriptions
+- **Bi-Monthly**: Property tax, insurance premiums
+- **Every 6 Months**: Car insurance, dental checkups
+- **Yearly**: Annual memberships, subscription renewals
 
 ## Project Structure
 
