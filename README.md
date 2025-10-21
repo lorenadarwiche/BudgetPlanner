@@ -165,12 +165,6 @@ Launches the test runner in interactive watch mode
 
 ## Future Enhancements
 
-<<<<<<< HEAD
-=======
-- ✅ ~~User authentication for multi-user support~~ (Implemented!)
-- ✅ ~~Email verification system~~ (Implemented!)
-- ✅ ~~Dark mode toggle~~ (Implemented!)
->>>>>>> 17e7f06 (Add dark mode support and EmailJS integration)
 - Backend API integration with database (MongoDB/PostgreSQL)
 - Password encryption and secure authentication
 - Export data to CSV/Excel
