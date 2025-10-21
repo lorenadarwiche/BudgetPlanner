@@ -71,8 +71,60 @@ const TransactionForm = ({ onAddTransaction, onAddRecurring }) => {
     }
   };
 
+  const calculateEndDate = (startDate, frequency) => {
+    const endDate = new Date(startDate);
+    
+    switch (frequency) {
+      case 'weekly':
+        endDate.setDate(endDate.getDate() + 7);
+        break;
+      case 'biweekly':
+        endDate.setDate(endDate.getDate() + 14);
+        break;
+      case 'monthly':
+        endDate.setMonth(endDate.getMonth() + 1);
+        break;
+      case 'bimonthly':
+        endDate.setMonth(endDate.getMonth() + 2);
+        break;
+      case 'semiannually':
+        endDate.setMonth(endDate.getMonth() + 6);
+        break;
+      case 'yearly':
+        endDate.setFullYear(endDate.getFullYear() + 1);
+        break;
+      default:
+        return '';
+    }
+    
+    return endDate.toISOString().split('T')[0];
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    
+    // When recurring checkbox is checked, set initial end date
+    if (name === 'isRecurring' && checked) {
+      const endDate = calculateEndDate(new Date(formData.date), formData.frequency);
+      setFormData(prev => ({
+        ...prev,
+        isRecurring: true,
+        endDate: endDate
+      }));
+      return;
+    }
+    
+    // Calculate end date when frequency changes
+    if (name === 'frequency' && formData.isRecurring) {
+      const endDate = calculateEndDate(new Date(formData.date), value);
+      setFormData(prev => ({
+        ...prev,
+        frequency: value,
+        endDate: endDate
+      }));
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,

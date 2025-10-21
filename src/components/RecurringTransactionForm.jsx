@@ -51,8 +51,49 @@ const RecurringTransactionForm = ({ onAddRecurring }) => {
     });
   };
 
+  const calculateEndDate = (startDate, frequency) => {
+    const endDate = new Date(startDate);
+    
+    switch (frequency) {
+      case 'weekly':
+        endDate.setDate(endDate.getDate() + 7);
+        break;
+      case 'biweekly':
+        endDate.setDate(endDate.getDate() + 14);
+        break;
+      case 'monthly':
+        endDate.setMonth(endDate.getMonth() + 1);
+        break;
+      case 'bimonthly':
+        endDate.setMonth(endDate.getMonth() + 2);
+        break;
+      case 'semiannually':
+        endDate.setMonth(endDate.getMonth() + 6);
+        break;
+      case 'yearly':
+        endDate.setFullYear(endDate.getFullYear() + 1);
+        break;
+      default:
+        return '';
+    }
+    
+    return endDate.toISOString().split('T')[0];
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Calculate end date when frequency changes
+    if (name === 'frequency') {
+      const endDate = calculateEndDate(new Date(formData.startDate), value);
+      setFormData({
+        ...formData,
+        frequency: value,
+        endDate: endDate
+      });
+      return;
+    }
+    
     setFormData({
       ...formData,
       [name]: value
