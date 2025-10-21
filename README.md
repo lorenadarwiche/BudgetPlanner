@@ -15,6 +15,8 @@ A modern, feature-rich budget tracking application built with React, Tailwind CS
   - Line chart displaying income vs expenses over time
 - **Smart Filtering**: Filter transactions by type, category, and date range
 - **Real-time Summary**: View total income, expenses, and balance at a glance
+- **📥 Data Export**: Export transactions to CSV or Excel format with one click
+- **🔄 Recurring Transactions**: Set up automatic recurring income and expenses (daily, weekly, monthly, yearly)
 - **Persistent Storage**: All data is saved to localStorage automatically
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Modern UI**: Beautiful gradient cards and sleek pastel color scheme
@@ -121,6 +123,43 @@ Use the filters section to:
 - View all transactions in the transaction list
 - Delete transactions by clicking the trash icon
 
+### Exporting Data
+
+1. Click the **"Export Data"** button in the Transaction History section
+2. Choose your preferred format:
+   - **CSV**: Compatible with Excel, Google Sheets, and most data tools
+   - **Excel**: Includes summary statistics (total income, expenses, and balance)
+3. The file will download automatically with the current date in the filename
+
+### Setting Up Recurring Transactions
+
+1. When adding a transaction, check the box **"Make this a recurring transaction"**
+2. Choose your settings:
+   - **Frequency**: Daily, Weekly, Monthly, or Yearly
+   - **Start Date**: When the recurring transaction begins
+   - **End Date** (Optional): When to stop generating transactions
+3. Click **"Add"**
+4. The **first transaction is created immediately**, and future transactions will be generated automatically
+
+**How It Works:**
+- The first transaction appears instantly in your transaction list
+- Future transactions are automatically generated when you open the app (if due)
+- Transactions are processed based on the last generated date
+- Each transaction can be deleted individually, even if created from a recurring rule
+
+**Managing Recurring Transactions:**
+- View all your recurring transactions in the "Recurring Transactions" section
+- **Edit**: Click the edit button to modify amount, frequency, dates, or description (perfect for fixing mistakes like choosing "monthly" instead of "daily")
+- **Pause/Resume**: Temporarily stop or restart automatic generation
+- **Delete**: Remove the recurring rule (past transactions remain unless deleted individually)
+
+**Example Use Cases:**
+- Monthly rent or mortgage payments
+- Weekly grocery budgets
+- Daily coffee expenses  
+- Yearly subscription renewals
+- Bi-weekly salary deposits
+
 ## Project Structure
 
 ```
@@ -162,17 +201,6 @@ Builds the app for production to the `build` folder
 
 ### `npm test`
 Launches the test runner in interactive watch mode
-
-## Future Enhancements
-
-- Backend API integration with database (MongoDB/PostgreSQL)
-- Export data to CSV/Excel
-- Recurring transaction support
-- Budget goals and alerts
-- Monthly/yearly reports
-- Email notifications for budget alerts
-- Multi-device sync with cloud backend
-- Social sharing features
 
 ## License
 

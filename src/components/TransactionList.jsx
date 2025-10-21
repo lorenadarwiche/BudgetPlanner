@@ -1,12 +1,16 @@
 import React from 'react';
 import { Trash2, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import ExportButton from './ExportButton';
 
 const TransactionList = ({ transactions, onDeleteTransaction }) => {
   return (
     <div className="bg-gradient-to-br from-white to-accent/10 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-lg p-8 border border-accent/30 dark:border-gray-600">
-      <div className="flex items-center space-x-3 mb-6">
-        <div className="w-1 h-8 bg-accent dark:bg-orange-500 rounded-full"></div>
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Transaction History</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-3">
+          <div className="w-1 h-8 bg-accent dark:bg-orange-500 rounded-full"></div>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Transaction History</h2>
+        </div>
+        <ExportButton transactions={transactions} />
       </div>
       
       {transactions.length === 0 ? (

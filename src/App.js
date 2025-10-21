@@ -4,15 +4,18 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Summary from './components/Summary';
 import TransactionForm from './components/TransactionForm';
+import RecurringTransactionList from './components/RecurringTransactionList';
 import Filters from './components/Filters';
 import Charts from './components/Charts';
 import TransactionList from './components/TransactionList';
 import Login from './components/Login';
 import Register from './components/Register';
+import { processRecurringTransactions } from './utils/recurringUtils';
 
 function BudgetTrackerApp() {
   const { currentUser } = useAuth();
   const [transactions, setTransactions] = useState([]);
+  const [recurringTransactions, setRecurringTransactions] = useState([]);
   const [filters, setFilters] = useState({
     type: 'all',
     category: 'all',
@@ -25,11 +28,21 @@ function BudgetTrackerApp() {
   useEffect(() => {
     if (currentUser) {
       const userTransactionsKey = `transactions_${currentUser.id}`;
+      const userRecurringKey = `recurring_${currentUser.id}`;
+      
       const savedTransactions = localStorage.getItem(userTransactionsKey);
+      const savedRecurring = localStorage.getItem(userRecurringKey);
+      
       if (savedTransactions) {
         setTransactions(JSON.parse(savedTransactions));
       } else {
         setTransactions([]);
+      }
+      
+      if (savedRecurring) {
+        setRecurringTransactions(JSON.parse(savedRecurring));
+      } else {
+        setRecurringTransactions([]);
       }
     } else {
       // Reset to login screen when user logs out
@@ -45,12 +58,55 @@ function BudgetTrackerApp() {
     }
   }, [transactions, currentUser]);
 
+  // Save recurring transactions to localStorage
+  useEffect(() => {
+    if (currentUser) {
+      const userRecurringKey = `recurring_${currentUser.id}`;
+      localStorage.setItem(userRecurringKey, JSON.stringify(recurringTransactions));
+    }
+  }, [recurringTransactions, currentUser]);
+
+  // Process recurring transactions daily
+  useEffect(() => {
+    if (currentUser && recurringTransactions.length > 0) {
+      const newTransactions = processRecurringTransactions(recurringTransactions, transactions);
+      if (newTransactions.length > 0) {
+        setTransactions([...newTransactions, ...transactions]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, recurringTransactions]);
+
   const addTransaction = (transaction) => {
     setTransactions([transaction, ...transactions]);
   };
 
   const deleteTransaction = (id) => {
     setTransactions(transactions.filter(t => t.id !== id));
+  };
+
+  const addRecurringTransaction = (recurring) => {
+    setRecurringTransactions([recurring, ...recurringTransactions]);
+  };
+
+  const deleteRecurringTransaction = (id) => {
+    setRecurringTransactions(recurringTransactions.filter(r => r.id !== id));
+  };
+
+  const toggleRecurringTransaction = (id) => {
+    setRecurringTransactions(
+      recurringTransactions.map(r =>
+        r.id === id ? { ...r, active: !r.active } : r
+      )
+    );
+  };
+
+  const editRecurringTransaction = (id, updates) => {
+    setRecurringTransactions(
+      recurringTransactions.map(r =>
+        r.id === id ? { ...r, ...updates } : r
+      )
+    );
   };
 
   // Filter transactions based on current filters
@@ -79,7 +135,19 @@ function BudgetTrackerApp() {
       <div className="container mx-auto px-4 py-8">
         <Summary transactions={filteredTransactions} />
         
-        <TransactionForm onAddTransaction={addTransaction} />
+        <TransactionForm 
+          onAddTransaction={addTransaction}
+          onAddRecurring={addRecurringTransaction}
+        />
+        
+        {recurringTransactions.length > 0 && (
+          <RecurringTransactionList
+            recurringTransactions={recurringTransactions}
+            onDelete={deleteRecurringTransaction}
+            onToggle={toggleRecurringTransaction}
+            onEdit={editRecurringTransaction}
+          />
+        )}
         
         <Filters 
           filters={filters} 

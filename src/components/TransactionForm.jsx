@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { PlusCircle } from 'lucide-react';
 
-const TransactionForm = ({ onAddTransaction }) => {
+const TransactionForm = ({ onAddTransaction, onAddRecurring }) => {
   const [formData, setFormData] = useState({
     type: 'expense',
     amount: '',
     category: '',
     description: '',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    isRecurring: false,
+    frequency: 'monthly',
+    endDate: ''
   });
 
   const categories = {
@@ -18,26 +21,61 @@ const TransactionForm = ({ onAddTransaction }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.amount && formData.category && formData.description) {
-      onAddTransaction({
-        ...formData,
-        amount: parseFloat(formData.amount),
-        id: Date.now()
-      });
+      if (formData.isRecurring) {
+        const recurringId = Date.now();
+        
+        // Add as recurring transaction
+        onAddRecurring({
+          id: recurringId,
+          type: formData.type,
+          amount: parseFloat(formData.amount),
+          category: formData.category,
+          description: formData.description,
+          frequency: formData.frequency,
+          startDate: formData.date,
+          endDate: formData.endDate || null,
+          lastGenerated: formData.date, // Mark first transaction as generated
+          active: true
+        });
+        
+        // Immediately create the first transaction
+        onAddTransaction({
+          id: Date.now() + 1, // Slightly different ID
+          type: formData.type,
+          amount: parseFloat(formData.amount),
+          category: formData.category,
+          description: `${formData.description} (Recurring)`,
+          date: formData.date,
+          recurringId: recurringId // Link to recurring transaction
+        });
+      } else {
+        // Add as one-time transaction
+        onAddTransaction({
+          ...formData,
+          amount: parseFloat(formData.amount),
+          id: Date.now()
+        });
+      }
+      
+      // Reset form
       setFormData({
         type: 'expense',
         amount: '',
         category: '',
         description: '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        isRecurring: false,
+        frequency: 'monthly',
+        endDate: ''
       });
     }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
       // Reset category when type changes
       ...(name === 'type' && { category: '' })
     }));
@@ -49,7 +87,8 @@ const TransactionForm = ({ onAddTransaction }) => {
         <div className="w-1 h-8 bg-primary dark:bg-blue-500 rounded-full"></div>
         <span>Add Transaction</span>
       </h2>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type</label>
           <select
@@ -126,6 +165,64 @@ const TransactionForm = ({ onAddTransaction }) => {
             <PlusCircle className="w-5 h-5" />
             <span>Add</span>
           </button>
+        </div>
+        </div>
+
+        {/* Recurring Transaction Option */}
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
+          <label className="flex items-center space-x-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="isRecurring"
+              checked={formData.isRecurring}
+              onChange={handleChange}
+              className="w-5 h-5 text-success dark:text-green-500 border-gray-300 dark:border-gray-600 rounded focus:ring-success dark:focus:ring-green-500"
+            />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Make this a recurring transaction</span>
+          </label>
+
+          {formData.isRecurring && (
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 pl-8">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frequency</label>
+                <select
+                  name="frequency"
+                  value={formData.frequency}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
+                >
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date (Optional)</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  min={formData.date}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </form>
     </div>
