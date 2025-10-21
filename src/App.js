@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Summary from './components/Summary';
 import TransactionForm from './components/TransactionForm';
@@ -69,7 +70,7 @@ function BudgetTrackerApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-secondary/10 to-primary/10">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-secondary/10 to-primary/10 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-200">
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
@@ -96,9 +97,11 @@ function BudgetTrackerApp() {
 
 function App() {
   return (
-    <AuthProvider>
-      <BudgetTrackerApp />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <BudgetTrackerApp />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

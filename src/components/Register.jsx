@@ -71,12 +71,15 @@ const Register = ({ onSwitchToLogin }) => {
 
   const strength = passwordStrength();
 
-  const handleVerified = async () => {
+  const handleVerified = async (enteredCode) => {
     try {
-      await verifyEmail(verificationData.userId, verificationData.verificationCode);
+      // If in demo mode, use stored code. Otherwise use entered code
+      const codeToVerify = verificationData.verificationCode || enteredCode;
+      await verifyEmail(verificationData.userId, codeToVerify);
       // User will be logged in automatically after verification
     } catch (err) {
       setError(err.message);
+      throw err; // Re-throw so EmailVerification component can handle it
     }
   };
 
@@ -101,39 +104,40 @@ const Register = ({ onSwitchToLogin }) => {
         verificationCode={verificationData.verificationCode}
         onVerified={handleVerified}
         onResendCode={handleResendCode}
+        isDemo={verificationData.isDemo}
       />
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-secondary/10 to-primary/10 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-secondary/10 to-primary/10 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-4 py-8 transition-colors duration-200">
       <div className="max-w-md w-full">
-        <div className="bg-gradient-to-br from-white to-success/10 rounded-3xl shadow-2xl p-8 border border-success/30">
+        <div className="bg-gradient-to-br from-white to-success/10 dark:from-gray-800 dark:to-gray-700 rounded-3xl shadow-2xl p-8 border border-success/30 dark:border-gray-600">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-block bg-gradient-to-r from-success to-secondary p-4 rounded-2xl shadow-lg mb-4">
-              <UserPlus className="w-12 h-12 text-gray-800" />
+            <div className="inline-block bg-gradient-to-r from-success to-secondary dark:from-green-600 dark:to-blue-500 p-4 rounded-2xl shadow-lg mb-4">
+              <UserPlus className="w-12 h-12 text-gray-800 dark:text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
-            <p className="text-gray-600">Start tracking your finances today</p>
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Create Account</h2>
+            <p className="text-gray-600 dark:text-gray-300">Start tracking your finances today</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-start space-x-3">
+            <div className="mb-6 bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start space-x-3">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-700">{error}</p>
+              <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
             </div>
           )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   type="text"
                   name="name"
@@ -141,17 +145,17 @@ const Register = ({ onSwitchToLogin }) => {
                   onChange={handleChange}
                   required
                   placeholder="John Doe"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   type="email"
                   name="email"
@@ -159,17 +163,17 @@ const Register = ({ onSwitchToLogin }) => {
                   onChange={handleChange}
                   required
                   placeholder="you@example.com"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   type="password"
                   name="password"
@@ -177,12 +181,12 @@ const Register = ({ onSwitchToLogin }) => {
                   onChange={handleChange}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
                 />
               </div>
               {strength && (
                 <div className="mt-2 flex items-center space-x-2">
-                  <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div className={`h-full ${strength.bg} transition-all duration-300`} style={{ width: strength.text === 'Weak' ? '33%' : strength.text === 'Medium' ? '66%' : '100%' }}></div>
                   </div>
                   <span className={`text-xs font-medium ${strength.color}`}>{strength.text}</span>
@@ -191,11 +195,11 @@ const Register = ({ onSwitchToLogin }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   type="password"
                   name="confirmPassword"
@@ -203,7 +207,7 @@ const Register = ({ onSwitchToLogin }) => {
                   onChange={handleChange}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-success focus:border-success transition-all duration-200 bg-white dark:bg-gray-700 dark:text-gray-100"
                 />
                 {formData.confirmPassword && formData.password === formData.confirmPassword && (
                   <CheckCircle className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-500" />
@@ -214,7 +218,7 @@ const Register = ({ onSwitchToLogin }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-success to-secondary hover:shadow-xl text-gray-800 font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r from-success to-secondary dark:from-green-600 dark:to-blue-500 hover:shadow-xl text-gray-800 dark:text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? 'Creating Account...' : 'Create Account'}
             </button>
@@ -222,7 +226,7 @@ const Register = ({ onSwitchToLogin }) => {
 
           {/* Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Already have an account?{' '}
               <button
                 onClick={onSwitchToLogin}
@@ -235,7 +239,7 @@ const Register = ({ onSwitchToLogin }) => {
 
           {/* Demo Info */}
           <div className="mt-6 bg-warning/30 border-2 border-warning rounded-xl p-4">
-            <p className="text-xs text-gray-700 text-center">
+            <p className="text-xs text-gray-700 dark:text-gray-300 text-center">
               <strong>Demo Note:</strong> This is a client-side demo. Data is stored in your browser's localStorage.
             </p>
           </div>

@@ -3,9 +3,9 @@ import emailjs from '@emailjs/browser';
 // EmailJS Configuration
 // Get your credentials from: https://www.emailjs.com/
 const EMAILJS_CONFIG = {
-  serviceId: process.env.REACT_APP_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-  templateId: process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
-  publicKey: process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+  serviceId: process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_96il7tk',
+  templateId: process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_9m6kin2',
+  publicKey: process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 't_T36KgXLtYJjpxWh'
 };
 
 // Initialize EmailJS
@@ -41,11 +41,17 @@ export const sendVerificationEmail = async (email, name, verificationCode) => {
       app_name: 'Budget Tracker'
     };
 
+    console.log('=== EMAIL SERVICE DEBUG ===');
+    console.log('Template params being sent to EmailJS:', templateParams);
+    console.log('Verification code being sent:', verificationCode);
+
     const response = await emailjs.send(
       EMAILJS_CONFIG.serviceId,
       EMAILJS_CONFIG.templateId,
       templateParams
     );
+    
+    console.log('EmailJS send successful, code sent was:', verificationCode);
 
     console.log('EmailJS response:', response);
 

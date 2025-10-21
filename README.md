@@ -7,6 +7,7 @@ A modern, feature-rich budget tracking application built with React, Tailwind CS
 - **🔐 User Authentication**: Secure login and registration system with personalized accounts
 - **📧 Email Verification**: Real email sending via EmailJS (with demo mode fallback)
 - **👤 User-Specific Data**: Each user has their own isolated transaction data
+- **🌓 Dark Mode**: Toggle between light and dark themes with persistent preference
 - **Add Transactions**: Record income and expense transactions with amount, category, date, and description
 - **Categorize Transactions**: Organize transactions into predefined categories (Food, Rent, Travel, etc.)
 - **Visual Analytics**: 
@@ -21,9 +22,10 @@ A modern, feature-rich budget tracking application built with React, Tailwind CS
 ## Tech Stack
 
 - **Frontend**: React 18 with Hooks (useState, useEffect, useContext)
-- **Styling**: Tailwind CSS with custom color palette
+- **Styling**: Tailwind CSS with custom color palette and dark mode
 - **Charts**: Recharts
 - **Icons**: Lucide React
+- **Email Service**: EmailJS for verification emails
 - **Authentication**: Custom Context API with localStorage
 - **Storage**: Browser localStorage (user-specific data isolation)
 
@@ -126,7 +128,7 @@ budget-tracker/
 ├── public/
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.jsx          # Top navigation bar with user info
+│   │   ├── Navbar.jsx          # Top navigation bar with dark mode toggle
 │   │   ├── Login.jsx           # Login form
 │   │   ├── Register.jsx        # Registration form
 │   │   ├── EmailVerification.jsx # Email verification screen
@@ -136,12 +138,17 @@ budget-tracker/
 │   │   ├── Charts.jsx          # Pie and line charts
 │   │   └── TransactionList.jsx # Transaction table
 │   ├── contexts/
-│   │   └── AuthContext.jsx     # Authentication context provider
+│   │   ├── AuthContext.jsx     # Authentication context provider
+│   │   └── ThemeContext.jsx    # Dark/light theme context provider
+│   ├── services/
+│   │   └── emailService.js     # EmailJS integration
 │   ├── App.js                  # Main app component with auth
-│   ├── index.css              # Tailwind CSS imports
-│   └── index.js               # App entry point
-├── tailwind.config.js
+│   ├── index.css               # Tailwind CSS imports
+│   └── index.js                # App entry point
+├── tailwind.config.js          # Tailwind config with dark mode
 ├── postcss.config.js
+├── .env.example                # EmailJS configuration template
+├── EMAILJS_SETUP.md            # Email setup guide
 └── package.json
 ```
 
@@ -158,12 +165,17 @@ Launches the test runner in interactive watch mode
 
 ## Future Enhancements
 
+<<<<<<< HEAD
+=======
+- ✅ ~~User authentication for multi-user support~~ (Implemented!)
+- ✅ ~~Email verification system~~ (Implemented!)
+- ✅ ~~Dark mode toggle~~ (Implemented!)
+>>>>>>> 17e7f06 (Add dark mode support and EmailJS integration)
 - Backend API integration with database (MongoDB/PostgreSQL)
 - Password encryption and secure authentication
 - Export data to CSV/Excel
 - Recurring transaction support
 - Budget goals and alerts
-- Dark mode toggle
 - Monthly/yearly reports
 - Email notifications for budget alerts
 - Multi-device sync with cloud backend

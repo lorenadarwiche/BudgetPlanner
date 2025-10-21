@@ -51,27 +51,27 @@ const Charts = ({ transactions }) => {
 
   if (transactions.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Charts</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Charts</h2>
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">Add transactions to see visualizations</p>
+          <p className="text-gray-500 dark:text-gray-400 text-lg">Add transactions to see visualizations</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-white to-primary/10 rounded-2xl shadow-lg p-8 mb-8 border border-primary/30">
+    <div className="bg-gradient-to-br from-white to-primary/10 dark:from-gray-800 dark:to-gray-700 rounded-2xl shadow-lg p-8 mb-8 border border-primary/30 dark:border-gray-600">
       <div className="flex items-center space-x-3 mb-8">
-        <div className="w-1 h-8 bg-primary rounded-full"></div>
-        <h2 className="text-2xl font-bold text-gray-800">Charts & Analytics</h2>
+        <div className="w-1 h-8 bg-primary dark:bg-blue-500 rounded-full"></div>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Charts & Analytics</h2>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pie Chart - Expenses by Category */}
         {pieData.length > 0 && (
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center space-x-2">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+            <h3 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200 flex items-center space-x-2">
               <div className="w-2 h-2 bg-accent rounded-full"></div>
               <span>Expenses by Category</span>
             </h3>
@@ -99,8 +99,8 @@ const Charts = ({ transactions }) => {
 
         {/* Line Chart - Income vs Expenses Over Time */}
         {lineData.length > 0 && (
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center space-x-2">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+            <h3 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200 flex items-center space-x-2">
               <div className="w-2 h-2 bg-success rounded-full"></div>
               <span>Income vs Expenses Over Time</span>
             </h3>

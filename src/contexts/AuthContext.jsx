@@ -36,6 +36,10 @@ export const AuthProvider = ({ children }) => {
 
     // Generate verification code
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    console.log('=== REGISTRATION DEBUG ===');
+    console.log('Generated verification code:', verificationCode);
+    console.log('Sending to email:', userData.email);
 
     // Send verification email
     const emailResult = await sendVerificationEmail(
@@ -43,6 +47,8 @@ export const AuthProvider = ({ children }) => {
       userData.name,
       verificationCode
     );
+    
+    console.log('Email sent result:', emailResult);
 
     // Create new user (unverified)
     const newUser = {
@@ -77,6 +83,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     const user = users[userIndex];
+    
+    console.log('=== VERIFICATION DEBUG ===');
+    console.log('Stored code:', user.verificationCode);
+    console.log('Entered code:', code);
+    console.log('Match:', user.verificationCode === code);
     
     if (user.verificationCode !== code) {
       throw new Error('Invalid verification code');
