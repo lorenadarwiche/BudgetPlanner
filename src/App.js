@@ -31,6 +31,9 @@ function BudgetTrackerApp() {
       } else {
         setTransactions([]);
       }
+    } else {
+      // Reset to login screen when user logs out
+      setShowLogin(true);
     }
   }, [currentUser]);
 
