@@ -1,6 +1,24 @@
 import React from 'react';
 import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+// Custom Tooltip with dark mode support
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg p-3 shadow-lg">
+        {label && <p className="font-semibold text-gray-800 dark:text-gray-100 mb-1">{label}</p>}
+        {payload.map((entry, index) => (
+          <p key={index} className="text-sm text-gray-700 dark:text-gray-200">
+            <span style={{ color: entry.color }} className="font-semibold">{entry.name}: </span>
+            {entry.value && typeof entry.value === 'number' ? `$${entry.value.toFixed(2)}` : entry.value}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 const Charts = ({ transactions }) => {
   // Calculate category breakdown for pie chart (expenses only)
   const expensesByCategory = transactions
@@ -91,7 +109,7 @@ const Charts = ({ transactions }) => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -106,13 +124,13 @@ const Charts = ({ transactions }) => {
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={lineData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                <CartesianGrid strokeDasharray="3 3" className="dark:opacity-30" />
+                <XAxis dataKey="date" tick={{ fontSize: 12, fill: 'currentColor' }} className="text-gray-700 dark:text-gray-300" />
+                <YAxis tick={{ fontSize: 12, fill: 'currentColor' }} className="text-gray-700 dark:text-gray-300" />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Line type="monotone" dataKey="income" stroke="#ccffcc" strokeWidth={3} name="Income" />
-                <Line type="monotone" dataKey="expense" stroke="#ffcc9a" strokeWidth={3} name="Expense" />
+                <Line type="monotone" dataKey="income" stroke="#22c55e" strokeWidth={3} name="Income" />
+                <Line type="monotone" dataKey="expense" stroke="#ef4444" strokeWidth={3} name="Expense" />
               </LineChart>
             </ResponsiveContainer>
           </div>

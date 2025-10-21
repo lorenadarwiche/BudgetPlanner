@@ -166,7 +166,6 @@ Launches the test runner in interactive watch mode
 ## Future Enhancements
 
 - Backend API integration with database (MongoDB/PostgreSQL)
-- Password encryption and secure authentication
 - Export data to CSV/Excel
 - Recurring transaction support
 - Budget goals and alerts
